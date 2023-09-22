@@ -1,31 +1,44 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteGoal = exports.updateGoal = exports.setGoal = exports.getGoals = void 0;
+const express_async_handler_1 = __importDefault(require("express-async-handler"));
 // @desc    Get goals
 // @route   GET /api/goals
 // @access  Private
-const getGoals = (req, res) => {
+exports.getGoals = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.status(200).json({ message: 'Get Goals' });
-};
-exports.getGoals = getGoals;
+}));
 // @desc    Set goal
 // @route   POST /api/goals
 // @access  Private
-const setGoal = (req, res) => {
+exports.setGoal = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.body.text) {
+        res.status(400);
+        throw new Error('Please set a text field');
+    }
     res.status(200).json({ message: 'Set Goal' });
-};
-exports.setGoal = setGoal;
+}));
 // @desc    Update goal
 // @route   PUT /api/goals/:id
 // @access  Private
-const updateGoal = (req, res) => {
+exports.updateGoal = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.status(200).json({ message: `Update goal ${req.params.id}` });
-};
-exports.updateGoal = updateGoal;
+}));
 // @desc    Delete goal
 // @route   DELETE /api/goals/:id
 // @access  Private
-const deleteGoal = (req, res) => {
+exports.deleteGoal = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.status(200).json({ message: `Delete goal ${req.params.id}` });
-};
-exports.deleteGoal = deleteGoal;
+}));

@@ -3,8 +3,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 import { router } from './routes/goalRoutes';
 import { errorHandler } from './middleware/errorMiddleware';
+import { connectDB } from './config/db';
 
 const PORT = process.env.PORT || 5000;
+
+connectDB();
 
 const app = express();
 
