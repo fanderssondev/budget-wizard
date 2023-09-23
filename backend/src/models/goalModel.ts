@@ -1,11 +1,20 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
+import { TUser } from './userModel';
 
 export type TGoal = {
+  user: TUser;
   text: String;
 };
 
 export const goalSchema = new Schema<TGoal>(
   {
+    user: {
+      user: {
+        type: Types.ObjectId,
+        required: true,
+        ref: 'User',
+      },
+    },
     text: {
       type: String,
       required: [true, 'Please add a text value'],
@@ -16,4 +25,4 @@ export const goalSchema = new Schema<TGoal>(
   }
 );
 
-export const Goal = model<TGoal>('Goal', goalSchema);
+export const Goal = model('Goal', goalSchema);
