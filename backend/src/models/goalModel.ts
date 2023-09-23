@@ -1,7 +1,7 @@
 import { Schema, model, Types } from 'mongoose';
 import { TUser } from './userModel';
 
-export type TGoal = {
+type TGoal = {
   user: TUser;
   text: String;
 };
