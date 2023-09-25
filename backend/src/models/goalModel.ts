@@ -9,11 +9,9 @@ type TGoal = {
 export const goalSchema = new Schema<TGoal>(
   {
     user: {
-      user: {
-        type: Types.ObjectId,
-        required: true,
-        ref: 'User',
-      },
+      type: Types.ObjectId,
+      required: true,
+      ref: 'User',
     },
     text: {
       type: String,

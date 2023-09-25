@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
-import { User } from '../models/userModel';
+import { User, TUser } from '../models/userModel';
 
 export const protect = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    let token: string = '';
+    let token = '';
 
     if (
       req.headers.authorization &&
@@ -16,13 +16,13 @@ export const protect = asyncHandler(
         token = req.headers.authorization.split(' ')[1];
 
         // Verify token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+        const decoded = jwt.verify(
+          token,
+          process.env.JWT_SECRET!
+        ) as JwtPayload;
 
         // Get user from the token
-        //NOTE: req.body.user || req.user @e2 35:18 .id on decoded too
-
-        //NOTE @e2 39:04
-        req.body.user = await User.findById(decoded.id!).select('-password');
+        req.body.user = await User.findById(decoded.id).select('-password');
 
         next();
       } catch (error) {

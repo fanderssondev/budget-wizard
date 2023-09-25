@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import asyncHandler from 'express-async-handler';
-import { User } from '../models/userModel';
+import { User, TUser } from '../models/userModel';
 
 // @desc    Register new user
 // @route   POST /api/users
@@ -75,7 +75,18 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
 // @route   GET /api/users/me
 // @access  Private
 export const getMe = asyncHandler(async (req: Request, res: Response) => {
-  res.json({ message: 'User data display' });
+  const user = await User.findById(req.body.user.id);
+
+  if (!user) {
+    res.status(500);
+    throw new Error('No user found');
+  }
+
+  res.status(200).json({
+    id: user._id,
+    name: user.name,
+    email: user.email,
+  });
 });
 
 // Generate JWT

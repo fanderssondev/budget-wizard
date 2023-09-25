@@ -14,11 +14,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteGoal = exports.updateGoal = exports.setGoal = exports.getGoals = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
+const goalModel_1 = require("../models/goalModel");
 // @desc    Get goals
 // @route   GET /api/goals
 // @access  Private
 exports.getGoals = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(200).json({ message: 'Get Goals' });
+    const goals = yield goalModel_1.Goal.find();
+    res.status(200).json(goals);
 }));
 // @desc    Set goal
 // @route   POST /api/goals
@@ -28,17 +30,34 @@ exports.setGoal = (0, express_async_handler_1.default)((req, res) => __awaiter(v
         res.status(400);
         throw new Error('Please set a text field');
     }
-    res.status(200).json({ message: 'Set Goal' });
+    const goal = yield goalModel_1.Goal.create({
+        text: req.body.text,
+    });
+    res.status(200).json(goal);
 }));
 // @desc    Update goal
 // @route   PUT /api/goals/:id
 // @access  Private
 exports.updateGoal = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(200).json({ message: `Update goal ${req.params.id}` });
+    const goal = yield goalModel_1.Goal.findById(req.params.id);
+    if (!goal) {
+        res.status(400);
+        throw new Error('Goal not found');
+    }
+    const updatedGoal = yield goalModel_1.Goal.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+    });
+    res.status(200).json(updatedGoal);
 }));
 // @desc    Delete goal
 // @route   DELETE /api/goals/:id
 // @access  Private
 exports.deleteGoal = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(200).json({ message: `Delete goal ${req.params.id}` });
+    const goal = yield goalModel_1.Goal.findById(req.params.id);
+    if (!goal) {
+        res.status(400);
+        throw new Error('Goal not found');
+    }
+    yield goal.deleteOne();
+    res.status(200).json({ id: req.params.id });
 }));

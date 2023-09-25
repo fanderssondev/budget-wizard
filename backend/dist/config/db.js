@@ -8,15 +8,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importDefault(require("mongoose"));
+exports.connectDB = void 0;
+const mongoose_1 = require("mongoose");
+const console_log_colors_1 = require("console-log-colors");
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const conn = yield mongoose_1.default.connect(process.env.MONGO_URI);
-        console.log(`MongoDB Connected: ${conn.connection.host}`);
+        const conn = yield (0, mongoose_1.connect)(process.env.MONGO_URI);
+        console_log_colors_1.log.bgCyanBright(`MongoDB Connected: ${conn.connection.host}`);
     }
-    catch (error) { }
+    catch (error) {
+        console_log_colors_1.log.bgRedBright(error);
+        process.exit(1);
+    }
 });
+exports.connectDB = connectDB;
