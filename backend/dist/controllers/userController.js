@@ -101,7 +101,16 @@ exports.loginUser = (0, express_async_handler_1.default)((req, res) => __awaiter
 // @route   GET /api/users/me
 // @access  Private
 exports.getMe = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.json({ message: 'User data display' });
+    const user = yield userModel_1.User.findById(req.body.user.id);
+    if (!user) {
+        res.status(500);
+        throw new Error('No user found');
+    }
+    res.status(200).json({
+        id: user._id,
+        name: user.name,
+        email: user.email,
+    });
 }));
 // Generate JWT
 const generateToken = (id) => {

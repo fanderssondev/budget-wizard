@@ -15,11 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteGoal = exports.updateGoal = exports.setGoal = exports.getGoals = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const goalModel_1 = require("../models/goalModel");
+const userModel_1 = require("../models/userModel");
 // @desc    Get goals
 // @route   GET /api/goals
 // @access  Private
 exports.getGoals = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const goals = yield goalModel_1.Goal.find();
+    const goals = yield goalModel_1.Goal.find({ user: req.body.user.id });
     res.status(200).json(goals);
 }));
 // @desc    Set goal
@@ -32,6 +33,7 @@ exports.setGoal = (0, express_async_handler_1.default)((req, res) => __awaiter(v
     }
     const goal = yield goalModel_1.Goal.create({
         text: req.body.text,
+        user: req.body.user.id,
     });
     res.status(200).json(goal);
 }));
@@ -43,6 +45,17 @@ exports.updateGoal = (0, express_async_handler_1.default)((req, res) => __awaite
     if (!goal) {
         res.status(400);
         throw new Error('Goal not found');
+    }
+    const user = yield userModel_1.User.findById(req.body.user.id);
+    // Check for user
+    if (!user) {
+        res.status(401);
+        throw new Error('User not found');
+    }
+    // Verify logged in user matches goal user
+    if (goal.user.toString() !== user.id) {
+        res.status(400);
+        throw new Error('User not authorized');
     }
     const updatedGoal = yield goalModel_1.Goal.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
@@ -57,6 +70,17 @@ exports.deleteGoal = (0, express_async_handler_1.default)((req, res) => __awaite
     if (!goal) {
         res.status(400);
         throw new Error('Goal not found');
+    }
+    const user = yield userModel_1.User.findById(req.body.user.id);
+    // Check for user
+    if (!user) {
+        res.status(401);
+        throw new Error('User not found');
+    }
+    // Verify logged in user matches goal user
+    if (goal.user.toString() !== user.id) {
+        res.status(400);
+        throw new Error('User not authorized');
     }
     yield goal.deleteOne();
     res.status(200).json({ id: req.params.id });

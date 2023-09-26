@@ -26,8 +26,6 @@ exports.protect = (0, express_async_handler_1.default)((req, res, next) => __awa
             // Verify token
             const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
             // Get user from the token
-            //NOTE: req.body.user || req.user @e2 35:18 .id on decoded too
-            //NOTE @e2 39:04
             req.body.user = yield userModel_1.User.findById(decoded.id).select('-password');
             next();
         }
