@@ -7,7 +7,8 @@
     "start": "nodemon backend/src/server.ts",
     "build": "tsc",
     "client": "npm --prefix ./frontend run dev",
-    "dev": "nodemon backend/src/server.ts --exec ts-node"
+    "backend": "nodemon backend/src/server.ts --exec ts-node",
+    "dev": "concurrently \"npm run backend\" \"npm run client\""
   },
   "keywords": [],
   "author": "Fredrik Andersson",
@@ -26,6 +27,7 @@
     "@types/express": "^4.17.17",
     "@types/jsonwebtoken": "^9.0.3",
     "@types/node": "^20.6.3",
+    "concurrently": "^8.2.1",
     "nodemon": "^3.0.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
