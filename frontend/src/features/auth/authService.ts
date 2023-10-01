@@ -1,11 +1,10 @@
 import axios from 'axios';
+import { UserType } from './authSlice';
 
 const API_URL = '/api/users/';
 
-type UserDataType = string | null;
-
 // Register user
-const register = async (userData: UserDataType) => {
+const register = async (userData: UserType) => {
   const response = await axios.post(API_URL, userData);
 
   if (response.data) {
