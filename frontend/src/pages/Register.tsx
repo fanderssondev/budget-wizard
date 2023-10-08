@@ -1,57 +1,76 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FaUser } from 'react-icons/fa';
-import { register, State } from '../features/auth/authSlice';
+import { register, reset, AuthState, User } from '../features/auth/authSlice';
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from 'redux';
+import Spinner from '../components/Spinner';
+import { RootState } from '../app/store';
 
-export interface UserData {
+interface FormData {
   name: string;
   email: string;
   password: string;
   password2: string;
 }
 
-const initialState = {
-  name: '',
-  email: '',
-  password: '',
-  password2: '',
-};
+function Register() {
+  const [formData, setFormData] = useState<FormData>({
+    name: '',
+    email: '',
+    password: '',
+    password2: '',
+  });
 
-const Register = () => {
-  const [formData, setFormData] = useState(initialState);
+  const { name, email, password, password2 } = formData;
 
+  const dispatch: ThunkDispatch<AuthState, any, AnyAction> = useDispatch();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const { user, isLoading, isError, isSuccess, message } = useSelector(
-    (state: { auth: State }) => state.auth
+    (state: RootState) => state.auth
   );
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    if (isSuccess || user) {
+      navigate('/');
+    }
+
+    dispatch(reset());
+  }, [user, isError, isSuccess, message]);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
   };
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (formData.password !== formData.password2) {
+    if (password !== password2) {
       toast.error('Passwords do not match');
     } else {
-      const userData: UserData = {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        password2: formData.password2,
+      const userData: User = {
+        name,
+        email,
+        password,
       };
 
       dispatch(register(userData));
     }
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <>
@@ -65,49 +84,45 @@ const Register = () => {
       <section className='form'>
         <form onSubmit={onSubmit}>
           <div className='form-group'>
-            <label htmlFor='name'>Name</label>
             <input
               type='text'
               className='form-control'
               id='name'
               name='name'
-              value={formData.name}
+              value={name}
               placeholder='Enter your name'
               onChange={onChange}
             />
           </div>
           <div className='form-group'>
-            <label htmlFor='email'>Email</label>
             <input
               type='email'
               className='form-control'
               id='email'
               name='email'
-              value={formData.email}
+              value={email}
               placeholder='Enter your email'
               onChange={onChange}
             />
           </div>
           <div className='form-group'>
-            <label htmlFor='password'>Password</label>
             <input
               type='password'
               className='form-control'
               id='password'
               name='password'
-              value={formData.password}
+              value={password}
               placeholder='Enter password'
               onChange={onChange}
             />
           </div>
           <div className='form-group'>
-            <label htmlFor='password2'>Password</label>
             <input
               type='password'
               className='form-control'
               id='password2'
               name='password2'
-              value={formData.password2}
+              value={password2}
               placeholder='Confirm password'
               onChange={onChange}
             />
@@ -121,6 +136,6 @@ const Register = () => {
       </section>
     </>
   );
-};
+}
 
 export default Register;

@@ -1,8 +1,8 @@
 import { Schema, model, Types } from 'mongoose';
-import { TUser } from './userModel';
+import { IUser } from './userModel';
 
 type TGoal = {
-  user: TUser;
+  user: IUser;
   text: String;
 };
 

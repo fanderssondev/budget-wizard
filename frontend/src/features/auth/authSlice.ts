@@ -1,23 +1,25 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService from './authService';
-import { UserData } from '../../pages/Register';
 
-export type UserType = UserData | null;
+export interface User {
+  name: string;
+  email: string;
+  password: string;
+}
 
-// Get user from local storage
-const userString = localStorage.getItem('user');
-const user: UserType = userString ? JSON.parse(userString) : null;
+// Get user from localStorage
+const user: User | null = JSON.parse(localStorage.getItem('user') ?? 'null');
 
-export interface State {
-  user: UserType;
+export interface AuthState {
+  user: User | null;
   isError: boolean;
   isSuccess: boolean;
   isLoading: boolean;
   message: string;
 }
 
-const initialState = {
-  user: user,
+const initialState: AuthState = {
+  user: user ? user : null,
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -27,24 +29,22 @@ const initialState = {
 // Register user
 export const register = createAsyncThunk(
   'auth/register',
-  async (user: UserType, thunkAPI) => {
+  async (user: User, thunkAPI) => {
     try {
-      const response = await authService.register(user);
-      return response.data;
+      return await authService.register(user);
     } catch (error: any) {
-      const message =
-        (error.message &&
-          error.response?.data &&
-          error.response.data?.message) ||
-        error.message ||
-        error.toString();
-
+      const message = 'sdfjbsdgjbsob';
+      // (error.response &&
+      //   error.response.data &&
+      //   error.response.data.message) ||
+      // error.message ||
+      // error.toString();
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
-const authSlice = createSlice({
+export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
@@ -75,4 +75,5 @@ const authSlice = createSlice({
 });
 
 export const { reset } = authSlice.actions;
+export type RootState = ReturnType<typeof authSlice.reducer>;
 export default authSlice.reducer;
