@@ -1,21 +1,48 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { FaSignInAlt } from 'react-icons/fa';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import {
+  login,
+  reset,
+  AuthState,
+  LoginUserData,
+} from '../features/auth/authSlice';
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from 'redux';
+import Spinner from '../components/Spinner';
+import { RootState } from '../app/store';
 
-type FormDataType = {
-  email: string;
-  password: string;
-};
-
-const initialState: FormDataType = {
+const initialState: LoginUserData = {
   email: '',
   password: '',
 };
 
 const Login = () => {
-  const [formData, setFormData] = useState<FormDataType>(initialState);
+  const [formData, setFormData] = useState(initialState);
+
+  const navigate = useNavigate();
+  const dispatch: ThunkDispatch<AuthState, any, AnyAction> = useDispatch();
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state: RootState) => state.auth
+  );
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    if (isSuccess || user) {
+      navigate('/');
+    }
+
+    dispatch(reset());
+  }, [user, isError, isSuccess, message]);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
@@ -23,7 +50,18 @@ const Login = () => {
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const userData: LoginUserData = {
+      email: formData.email,
+      password: formData.password,
+    };
+
+    dispatch(login(userData));
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <>

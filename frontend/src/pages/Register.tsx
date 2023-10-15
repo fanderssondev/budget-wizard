@@ -26,8 +26,8 @@ function Register() {
 
   const { name, email, password, password2 } = formData;
 
-  const dispatch: ThunkDispatch<AuthState, any, AnyAction> = useDispatch();
   const navigate = useNavigate();
+  const dispatch: ThunkDispatch<AuthState, any, AnyAction> = useDispatch();
 
   const { user, isLoading, isError, isSuccess, message } = useSelector(
     (state: RootState) => state.auth
