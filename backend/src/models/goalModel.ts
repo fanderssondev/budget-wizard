@@ -1,12 +1,12 @@
 import { Schema, model, Types } from 'mongoose';
 import { IUser } from './userModel';
 
-type TGoal = {
+export interface Goal {
   user: IUser;
   text: String;
-};
+}
 
-export const goalSchema = new Schema<TGoal>(
+export const goalSchema = new Schema<Goal>(
   {
     user: {
       type: Types.ObjectId,
