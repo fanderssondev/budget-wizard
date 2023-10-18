@@ -9,10 +9,11 @@ import {
   AuthState,
   LoginUserData,
 } from '../features/auth/authSlice';
-import { ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
+// NOTE: remove import { ThunkDispatch } from 'redux-thunk';
+// NOTE: remove import { AnyAction } from 'redux';
 import Spinner from '../components/Spinner';
 import { RootState } from '../app/store';
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 
 const initialState: LoginUserData = {
   email: '',
