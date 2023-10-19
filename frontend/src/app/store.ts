@@ -9,11 +9,7 @@ const store = configureStore({
   },
 });
 
-const rootReducer = combineReducers({
-  auth: authReducer,
-  goals: goalReducer,
-});
-
-export type RootState = ReturnType<typeof rootReducer>;
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
 export default store;

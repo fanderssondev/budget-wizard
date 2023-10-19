@@ -3,11 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FaUser } from 'react-icons/fa';
-import { register, reset, AuthState, User } from '../features/auth/authSlice';
-import { ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
+import { register, reset, User } from '../features/auth/authSlice';
 import Spinner from '../components/Spinner';
-import { RootState } from '../app/store';
+import { RootState, AppDispatch } from '../app/store';
 
 interface FormData {
   name: string;
@@ -27,7 +25,7 @@ function Register() {
   const { name, email, password, password2 } = formData;
 
   const navigate = useNavigate();
-  const dispatch: ThunkDispatch<AuthState, any, AnyAction> = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const { user, isLoading, isError, isSuccess, message } = useSelector(
     (state: RootState) => state.auth

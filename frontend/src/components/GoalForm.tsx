@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { GoalState, createGoal } from '../features/goals/goalSlice';
-import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { createGoal } from '../features/goals/goalSlice';
+import { AppDispatch } from '../app/store';
 
 const GoalForm = () => {
   const [text, setText] = useState('');
 
-  const dispatch: ThunkDispatch<GoalState, any, AnyAction> = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

@@ -3,17 +3,9 @@ import { FaSignInAlt } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import {
-  login,
-  reset,
-  AuthState,
-  LoginUserData,
-} from '../features/auth/authSlice';
-// NOTE: remove import { ThunkDispatch } from 'redux-thunk';
-// NOTE: remove import { AnyAction } from 'redux';
+import { login, reset, LoginUserData } from '../features/auth/authSlice';
 import Spinner from '../components/Spinner';
-import { RootState } from '../app/store';
-import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { RootState, AppDispatch } from '../app/store';
 
 const initialState: LoginUserData = {
   email: '',
@@ -24,7 +16,7 @@ const Login = () => {
   const [formData, setFormData] = useState(initialState);
 
   const navigate = useNavigate();
-  const dispatch: ThunkDispatch<AuthState, any, AnyAction> = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const { user, isLoading, isError, isSuccess, message } = useSelector(
     (state: RootState) => state.auth

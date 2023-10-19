@@ -1,12 +1,11 @@
 import { FaSignInAlt, FaSignOutAlt, FaUser } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { AuthState, reset, logout } from '../features/auth/authSlice';
-import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
-import { RootState } from '../app/store';
+import { reset, logout } from '../features/auth/authSlice';
+import { RootState, AppDispatch } from '../app/store';
 
 const Header = () => {
-  const dispatch: ThunkDispatch<AuthState, any, AnyAction> = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state: RootState) => state.auth);
 
