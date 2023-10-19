@@ -40,7 +40,6 @@ export const updateGoal = asyncHandler(async (req: Request, res: Response) => {
     throw new Error('Goal not found');
   }
 
-  // HACK: const user = await User.findById(req.body.user.id);
   const user = req.body.user;
 
   // Check for user
@@ -73,7 +72,6 @@ export const deleteGoal = asyncHandler(async (req: Request, res: Response) => {
     throw new Error('Goal not found');
   }
 
-  // HACK: const user = await User.findById(req.body.user.id);
   const user = req.body.user;
 
   // Check for user

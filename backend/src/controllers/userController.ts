@@ -75,7 +75,6 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
 // @route   GET /api/users/me
 // @access  Private
 export const getMe = asyncHandler(async (req: Request, res: Response) => {
-  // HACK: const user = await User.findById(req.body.user.id);
   const user = req.body.user;
 
   if (!user) {
